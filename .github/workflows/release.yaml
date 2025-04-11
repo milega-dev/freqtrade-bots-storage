@@ -79,7 +79,7 @@ jobs:
       - name: "Set up Python"
         uses: actions/setup-python@v5
         with:
-          python-version-file: ".python-version"
+          python-version: "3.12"
 
       - name: Set project version
         run: |
@@ -120,7 +120,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version-file: "pyproject.toml"
+          python-version: "3.12"
 
       - name: Publish distribution to PyPI
         run: uv publish --repository pypi
