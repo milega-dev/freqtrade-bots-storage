@@ -66,60 +66,38 @@ jobs:
             echo "The new version $NEW_VERSION is greater than the latest version $LATEST_VERSION on PyPI."
           fi
 
-  setup_and_build:
+  setup_build_and_publish:
     needs: [details, check_pypi]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.12"
-
       - name: Install UV
-        run: |
-          curl -sSL https://github.com/astral-sh/uv/releases/latest/download/uv-installer.sh | bash
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+        uses: astral-sh/setup-uv@v5
+
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
 
       - name: Set project version
         run: |
           # Update version in pyproject.toml
           sed -i "s/^version = .*$/version = \"${{ needs.details.outputs.new_version }}\"/" pyproject.toml
 
-      - name: Install dependencies
-        run: uv pip install -e . --no-deps
+      - name: Install the project
+        run: uv sync --all-extras --dev
 
       - name: Build source and wheel distribution
         run: uv build
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: dist/
-
-  pypi_publish:
-    name: Upload release to PyPI
-    needs: [setup_and_build, details]
-    runs-on: ubuntu-latest
-    environment:
-      name: release
-    permissions:
-      id-token: write
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: dist
-          path: dist/
-
       - name: Publish distribution to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        run: uv publish
 
   github_release:
     name: Create GitHub Release
-    needs: [setup_and_build, details]
+    needs: [setup_build_and_publish, details]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -133,7 +111,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dist
-          path: dist/
+          path: ./dist/
 
       - name: Create GitHub Release
         id: create_release

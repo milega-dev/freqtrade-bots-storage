@@ -1,7 +1,13 @@
 [project]
 name = "freqtrade-bots-storage"
-version = "0.0.1"
+version = "0.0.4"
 description = "A persistent storage for freqtrade bots"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = []
+
+[[tool.uv.index]]
+name = "freqtrade-bots-storage"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
