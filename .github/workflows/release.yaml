@@ -123,7 +123,7 @@ jobs:
           python-version: "3.12"
 
       - name: Publish distribution to PyPI
-        run: uv publish --repository pypi
+        run: uv publish
         env:
           # No token needed for trusted publishing
           UV_PUBLISH_TRUSTED: "true"
