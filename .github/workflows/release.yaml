@@ -66,7 +66,7 @@ jobs:
             echo "The new version $NEW_VERSION is greater than the latest version $LATEST_VERSION on PyPI."
           fi
 
-  setup_build_and_publish:
+  setup_and_build:
     needs: [details, check_pypi]
     runs-on: ubuntu-latest
     steps:
@@ -92,12 +92,35 @@ jobs:
       - name: Build source and wheel distribution
         run: uv build
 
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist/
+
+  pypi_publish:
+    name: Upload release to PyPI
+    needs: [setup_and_build, details]
+    runs-on: ubuntu-latest
+    environment:
+      name: release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: ./dist/
+
       - name: Publish distribution to PyPI
         run: uv publish
 
+
   github_release:
     name: Create GitHub Release
-    needs: [setup_build_and_publish, details]
+    needs: [setup_and_build, details]
     runs-on: ubuntu-latest
     permissions:
       contents: write
