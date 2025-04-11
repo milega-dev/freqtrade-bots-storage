@@ -120,7 +120,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version-file: ".python-version"
+          python-version-file: "pyproject.toml"
 
       - name: Publish distribution to PyPI
         run: uv publish --repository pypi
