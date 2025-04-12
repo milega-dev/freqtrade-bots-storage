@@ -1,7 +1,7 @@
 from typing import Self, Any
 import os
 import json
-from app.core.models import BotState
+from src.models.bot_state import BotState
 
 
 class FileTradingBotsStorage():
@@ -45,7 +45,6 @@ class FileTradingBotsStorage():
         exchange = bot_config["exchange"]
         strategy = bot_config["strategy"]
         status = "stopped"
-        trading_amount = bot_config["trading_amount"]
         bot_id = bot_config["id"]
 
         bot_state = BotState(
@@ -55,14 +54,13 @@ class FileTradingBotsStorage():
             strategy=strategy,
             exchange=exchange,
             status=status,
-            trading_amount=trading_amount
         )
-        config = { k: v for k, v in bot_config.items() if k not in ["id", "name", "pair", "exchange", "strategy", "status", "trading_amount"]}
+        config = { k: v for k, v in bot_config.items() if k not in ["id", "name", "pair", "exchange", "strategy", "status"]}
         
         storage_dict = self._get_storage_dict()
 
         storage_dict["configs"][bot_id] = config
-        storage_dict["states"][bot_id] = bot_state.model_dump()
+        storage_dict["states"][bot_id] = bot_state.to_dict()
         storage_dict["detailed_states"][bot_id] = {}
         
         self._save_storage_dict(storage_dict)
