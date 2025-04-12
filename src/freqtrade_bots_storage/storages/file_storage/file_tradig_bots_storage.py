@@ -88,12 +88,12 @@ class FileTradingBotsStorage():
                 return self.get_bot_by_id(bot_id)
         return None
         
-    async def get_bots_list(self) -> list[dict[str, Any]]:
+    async def get_all_bots(self) -> dict[str, dict[str, Any]]:
         """
-        Returns list of bots
+        Returns dict of bots - key is bot_id, value is bot_info
         """
         storage_dict = self._get_storage_dict()
-        return list(storage_dict["bots"].values())
+        return storage_dict["bots"]
     
 
     async def delete_bot(self, bot_id: str) -> None:
