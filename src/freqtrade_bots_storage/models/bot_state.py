@@ -2,7 +2,7 @@ from dataclasses import dataclass, asdict
 from typing import Any
 
 @dataclass
-class BotState:
+class BotInfo:
     id: str
     name: str
     pair: str
