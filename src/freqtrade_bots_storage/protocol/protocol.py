@@ -15,7 +15,10 @@ class TradingBotsStorageProtocol(Protocol):
     async def get_active_bot_by_exchange_and_pair(self, exchange: str, pair: str) -> dict[str, Any] | None:
         ...
 
-    async def get_bots_list(self) -> list[dict[str, Any]]:
+    async def get_all_bots(self) -> dict[str, dict[str, Any]]:
+        """
+        Returns dict of bots - key is bot_id, value is bot_info
+        """
         ...
         
     async def delete_bot(self, bot_id: str) -> None:
