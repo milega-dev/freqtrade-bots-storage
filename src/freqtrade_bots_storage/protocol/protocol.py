@@ -24,7 +24,13 @@ class TradingBotsStorageProtocol(Protocol):
     async def delete_bot(self, bot_id: str) -> None:
         ...
     
-    async def update_bot(self, bot_id: str, config: dict[str, Any]) -> None:
+    async def update_bot_state(self, bot_id: str, update: dict[str, Any]) -> None:
+        ...
+
+    async def update_bot_config(self, bot_id: str, update: dict[str, Any]) -> None:
+        ...
+
+    async def update_bot_status(self, bot_id: str, status: str) -> None:
         ...
 
     async def close(self) -> None:
