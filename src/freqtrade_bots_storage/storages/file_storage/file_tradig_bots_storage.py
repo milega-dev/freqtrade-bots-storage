@@ -104,7 +104,8 @@ class FileTradingBotsStorage:
         storage_dict = self._get_storage_dict()
         bots = storage_dict["bots"]
         result = {}
-
+        logging.info(f"storage DICT: {storage_dict}")
+        logging.info(f"Bots in Storage: {bots}")
         for bot_id, bot_info in bots.items():
             if (
                 (exchanges is None or bot_info["exchange"] in exchanges)
