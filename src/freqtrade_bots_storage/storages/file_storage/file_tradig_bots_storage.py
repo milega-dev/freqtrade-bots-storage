@@ -2,7 +2,7 @@ from typing import Self, Any
 import os
 import json
 from freqtrade_bots_storage.models.bot_state import BotInfo
-
+import uuid_utils
 
 class FileTradingBotsStorage:
     """
@@ -41,8 +41,13 @@ class FileTradingBotsStorage:
         pair = bot_config["pair"]
         exchange = bot_config["exchange"]
         strategy = bot_config["strategy"]
-        status = "stopped"
-        bot_id = bot_config["id"]
+        if "status" not in bot_config:
+            bot_config["status"] = "stopped"
+
+        if "id" not in bot_config:
+            bot_id = str(uuid_utils.uuid7())
+        else:
+            bot_id = bot_config["id"]
 
         bot_info = BotInfo(
             id=bot_id,
@@ -50,7 +55,7 @@ class FileTradingBotsStorage:
             pair=pair,
             strategy=strategy,
             exchange=exchange,
-            status=status,
+            status=bot_config["status"],
         )
         config = {
             k: v
@@ -65,7 +70,8 @@ class FileTradingBotsStorage:
         storage_dict["states"][bot_id] = {}
 
         self._save_storage_dict(storage_dict)
-        return bot_config["id"]
+        return bot_id
+
 
     async def get_bot_full_data_by_id(self, bot_id: str) -> dict[str, Any]:
         """
@@ -130,7 +136,7 @@ class FileTradingBotsStorage:
                 and (statuses is None or bot_info["status"] in statuses)
                 and (pairs is None or bot_info["pair"] in pairs)
             ):
-                result[bot_id] = {"bot": bot_info, "config": configs[bot_id]}
+                result[bot_id] = {**bot_info, **configs[bot_id]}
 
         return result
 
