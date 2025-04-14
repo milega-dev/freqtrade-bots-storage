@@ -114,6 +114,8 @@ class FileTradingBotsStorage:
                 and (pairs is None or bot_info["pair"] in pairs)
             ):
                 result[bot_id] = bot_info
+        logging.info(f"Result: {result}")
+        logging.info(f"PARAMS: {exchanges, strategies, statuses, pairs}")
 
         return result
 
