@@ -3,6 +3,7 @@ import os
 import json
 from freqtrade_bots_storage.models.bot_state import BotInfo
 import uuid_utils
+import logging
 
 class FileTradingBotsStorage:
     """
@@ -14,7 +15,7 @@ class FileTradingBotsStorage:
 
     async def create_storage(self, storage_dir: str) -> Self:
         self.storage_filename = f"{storage_dir}/trading_bots_storage.json"
-        print(f"Storage filename: {self.storage_filename}")
+        logging.info(f"Storage filename: {self.storage_filename}")
         if not os.path.exists(storage_dir):
             os.makedirs(storage_dir)
         if not os.path.exists(self.storage_filename):
