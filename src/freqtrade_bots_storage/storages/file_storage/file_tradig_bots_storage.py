@@ -13,7 +13,7 @@ class FileTradingBotsStorage:
     def __init__(self) -> None:
         self.storage_filename: str | None = None
 
-    async def create_storage(self, storage_dir: str) -> Self:
+    async def init_storage(self, storage_dir: str) -> Self:
         self.storage_filename = f"{storage_dir}/trading_bots_storage.json"
         logging.info(f"Storage filename: {self.storage_filename}")
         if not os.path.exists(storage_dir):
