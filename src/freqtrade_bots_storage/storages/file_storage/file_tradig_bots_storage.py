@@ -9,10 +9,12 @@ class FileTradingBotsStorage:
     Storage for trading bots states and configs
     """
 
-    def __init__(self) -> None: ...
+    def __init__(self) -> None:
+        self.storage_filename: str | None = None
 
     async def create_storage(self, storage_dir: str) -> Self:
         self.storage_filename = f"{storage_dir}/trading_bots_storage.json"
+        print(f"Storage filename: {self.storage_filename}")
         if not os.path.exists(storage_dir):
             os.makedirs(storage_dir)
         if not os.path.exists(self.storage_filename):
