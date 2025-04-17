@@ -24,6 +24,15 @@ class TradingBotsStorageProtocol(Protocol):
         """
         ...
 
+    def get_bots_sync(
+        self,
+        exchanges: list[str] | None = None,
+        strategies: list[str] | None = None,
+        statuses: list[str] | None = None,
+        pairs: list[str] | None = None,
+    ) -> dict[str, dict[str, Any]]: ...
+    
+    
     async def get_bots_with_configs(
         self,
         exchanges: list[str] | None = None,

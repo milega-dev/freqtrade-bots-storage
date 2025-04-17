@@ -3,6 +3,7 @@ import os
 import json
 from freqtrade_bots_storage.models.bot_state import BotInfo
 import uuid_utils
+import asyncio
 import logging
 
 class FileTradingBotsStorage:
@@ -118,6 +119,17 @@ class FileTradingBotsStorage:
         logging.info(f"PARAMS: {exchanges, strategies, statuses, pairs}")
 
         return result
+
+
+    def get_bots_sync(
+        self,
+        exchanges: list[str] | None = None,
+        strategies: list[str] | None = None,
+        statuses: list[str] | None = None,
+        pairs: list[str] | None = None,
+    ) -> dict[str, dict[str, Any]]:
+        loop = asyncio.get_event_loop()
+        return loop.run_until_complete(self.get_bots(exchanges, strategies, statuses, pairs))
 
 
     async def get_bots_with_configs(
