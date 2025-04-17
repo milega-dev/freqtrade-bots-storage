@@ -13,7 +13,7 @@ class FileTradingBotsStorage:
     def __init__(self) -> None:
         self.storage_filename: str | None = None
 
-    async def init_storage(self, storage_dir: str) -> Self:
+    def init_storage(self, storage_dir: str) -> Self:
         self.storage_filename = f"{storage_dir}/trading_bots_storage.json"
         logging.info(f"Storage filename: {self.storage_filename}")
         if not os.path.exists(storage_dir):
@@ -154,7 +154,7 @@ class FileTradingBotsStorage:
         del storage_dict["states"][bot_id]
         self._save_storage_dict(storage_dict)
 
-    async def update_bot_state(self, bot_id: str, update: dict[str, Any]) -> None:
+    def update_bot_state(self, bot_id: str, update: dict[str, Any]) -> None:
         storage_dict = self._get_storage_dict()
         bot_info = storage_dict["bots"].get(bot_id)
         if bot_info is None:
